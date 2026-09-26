@@ -1,36 +1,32 @@
 #include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
+
+void update(int *a, int *b)
+{
+    int sum;
+    int difference;
+
+    sum = *a + *b;
+    difference = *a - *b;
+
+    if (difference < 0)
+    {
+        difference = -difference;
+    }
+
+    *a = sum;
+    *b = difference;
+}
 
 int main()
 {
-    char num[1000];
-    int frequency[10] = {0};
+    int a, b;
+    int *pa = &a, *pb = &b;
 
-    // Read the string
-    scanf("%s", num);
+    scanf("%d %d", &a, &b);
 
-    // Check every character
-    for (int i = 0; num[i] != '\0'; i++)
-    {
-        if (num[i] >= '0' && num[i] <= '9')
-        {
-            int digit = num[i] - '0';
-            frequency[digit]++;
-        }
-    }
+    update(pa, pb);
 
-    // Print frequency of digits 0 to 9
-    for (int i = 0; i < 10; i++)
-    {
-        printf("%d", frequency[i]);
-
-        if (i != 9)
-        {
-            printf(" ");
-        }
-    }
+    printf("%d\n%d", a, b);
 
     return 0;
 }
