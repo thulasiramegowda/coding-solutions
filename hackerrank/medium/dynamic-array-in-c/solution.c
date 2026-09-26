@@ -1,36 +1,50 @@
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
 
 int main()
 {
-    char num[1000];
-    int frequency[10] = {0};
+    int total_number_of_shelves;
+    scanf("%d", &total_number_of_shelves);
 
-    // Read the string
-    scanf("%s", num);
+    int total_number_of_queries;
+    scanf("%d", &total_number_of_queries);
 
-    // Check every character
-    for (int i = 0; num[i] != '\0'; i++)
+    // Allocate memory for number of books on each shelf
+    total_number_of_books = malloc(
+        total_number_of_shelves * sizeof(int)
+    );
+
+    // Allocate memory for pages on each shelf
+    total_number_of_pages = malloc(
+        total_number_of_shelves * sizeof(int*)
+    );
+
+    // Initialize all shelves
+    for (int i = 0; i < total_number_of_shelves; i++)
     {
-        if (num[i] >= '0' && num[i] <= '9')
-        {
-            int digit = num[i] - '0';
-            frequency[digit]++;
-        }
+        total_number_of_books[i] = 0;
+        total_number_of_pages[i] = NULL;
     }
 
-    // Print frequency of digits 0 to 9
-    for (int i = 0; i < 10; i++)
+    while (total_number_of_queries--)
     {
-        printf("%d", frequency[i]);
+        int type_of_query;
+        scanf("%d", &type_of_query);
 
-        if (i != 9)
+        if (type_of_query == 1)
         {
-            printf(" ");
-        }
-    }
+            int x, y;
+            scanf("%d %d", &x, &y);
 
-    return 0;
-}
+            // Current number of books on shelf x
+            int current_books = total_number_of_books[x];
+
+            // Increase book count
+            total_number_of_books[x]++;
+
+            // Increase memory for one more book
+            total_number_of_pages[x] = realloc(
+                total_number_of_pages[x],
+                total_number_of_books[x] * sizeof(int)
+            );
+
+            // Store pages of the new book
+            total_number_of_pages[x][current_books] = y;
