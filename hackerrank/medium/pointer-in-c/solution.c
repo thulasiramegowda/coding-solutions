@@ -1,39 +1,32 @@
 #include <stdio.h>
 
-/*
- * Function to find the maximum of four integers
- */
-int max_of_four(int a, int b, int c, int d)
+void update(int *a, int *b)
 {
-    int max = a;
+    int sum;
+    int difference;
 
-    if (b > max)
+    sum = *a + *b;
+    difference = *a - *b;
+
+    if (difference < 0)
     {
-        max = b;
+        difference = -difference;
     }
 
-    if (c > max)
-    {
-        max = c;
-    }
-
-    if (d > max)
-    {
-        max = d;
-    }
-
-    return max;
+    *a = sum;
+    *b = difference;
 }
 
 int main()
 {
-    int a, b, c, d;
+    int a, b;
+    int *pa = &a, *pb = &b;
 
-    scanf("%d %d %d %d", &a, &b, &c, &d);
+    scanf("%d %d", &a, &b);
 
-    int ans = max_of_four(a, b, c, d);
+    update(pa, pb);
 
-    printf("%d", ans);
+    printf("%d\n%d", a, b);
 
     return 0;
 }
