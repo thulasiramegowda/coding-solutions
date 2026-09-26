@@ -1,50 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-int main()
+int next_permutation(int n, char **s)
 {
-    int total_number_of_shelves;
-    scanf("%d", &total_number_of_shelves);
+    // Step 1: Find the rightmost position i
+    // where s[i] < s[i + 1]
+    int i = n - 2;
 
-    int total_number_of_queries;
-    scanf("%d", &total_number_of_queries);
-
-    // Allocate memory for number of books on each shelf
-    total_number_of_books = malloc(
-        total_number_of_shelves * sizeof(int)
-    );
-
-    // Allocate memory for pages on each shelf
-    total_number_of_pages = malloc(
-        total_number_of_shelves * sizeof(int*)
-    );
-
-    // Initialize all shelves
-    for (int i = 0; i < total_number_of_shelves; i++)
+    while (i >= 0 && strcmp(s[i], s[i + 1]) >= 0)
     {
-        total_number_of_books[i] = 0;
-        total_number_of_pages[i] = NULL;
+        i--;
     }
 
-    while (total_number_of_queries--)
+    // No next permutation
+    if (i < 0)
     {
-        int type_of_query;
-        scanf("%d", &type_of_query);
+        return 0;
+    }
 
-        if (type_of_query == 1)
-        {
-            int x, y;
-            scanf("%d %d", &x, &y);
+    // Step 2: Find the rightmost element
+    // greater than s[i]
+    int j = n - 1;
 
-            // Current number of books on shelf x
-            int current_books = total_number_of_books[x];
+    while (strcmp(s[j], s[i]) <= 0)
+    {
+        j--;
+    }
 
-            // Increase book count
-            total_number_of_books[x]++;
+    // Step 3: Swap s[i] and s[j]
+    char *temp = s[i];
+    s[i] = s[j];
+    s[j] = temp;
 
-            // Increase memory for one more book
-            total_number_of_pages[x] = realloc(
-                total_number_of_pages[x],
-                total_number_of_books[x] * sizeof(int)
-            );
+    // Step 4: Reverse the part after i
+    int left = i + 1;
+    int right = n - 1;
 
-            // Store pages of the new book
-            total_number_of_pages[x][current_books] = y;
+    while (left < right)
+    {
+        temp = s[left];
+        s[left] = s[right];
+        s[right] = temp;
+
+        left++;
+        right--;
+    }
+
+    return 1;
+
+}
+
