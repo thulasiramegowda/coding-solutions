@@ -43,24 +43,22 @@ Only 1771 contains an even number of digits.
 ## Solution
 
 **Language:** C  
-**Runtime:** 0 ms  
-**Memory:** 8.5 MB  
-**Submitted:** 2026-09-28T12:47:25.466Z  
+**Runtime:** 0 ms (beats 100.00%)  
+**Memory:** 9.1 MB (beats 14.47%)  
+**Submitted:** 2026-09-28T13:02:37.389Z  
 
 ```c
 int findNumbers(int* nums, int numsSize) {
     int answer=0;
   for(int i=0;i<numsSize;i++){
-        if(nums[i]<10){
-         continue;
-        }
-        if(nums[i]%2==0){
-            for(int j=0;j<i;j++){
-                if(j%2==0){
+    int digit=0;
+    while(nums[i] != 0){
+        nums[i]=nums[i]/10;
+        digit++;
+    }
+    if(digit%2==0){
         answer++;
-            }
-            }
-        }
+    }
     }
     return answer;
   }
