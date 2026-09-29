@@ -15,45 +15,54 @@ char* rtrim(char*);
 char** split_string(char*);
 
 int parse_int(char*);
-long parse_long(char*);
 
 /*
- * Complete the 'aVeryBigSum' function below.
+ * Complete the 'diagonalDifference' function below.
  *
- * The function is expected to return a LONG_INTEGER.
- * The function accepts LONG_INTEGER_ARRAY ar as parameter.
+ * The function is expected to return an INTEGER.
+ * The function accepts 2D_INTEGER_ARRAY arr as parameter.
  */
 
-long aVeryBigSum(int ar_count, long* ar) {
+int diagonalDifference(int arr_rows, int arr_columns, int** arr) {
 
-    long sum = 0;
+    int primary = 0;
+    int secondary = 0;
 
-    for (int i = 0; i < ar_count; i++) {
-        sum = sum + ar[i];
+    for (int i = 0; i < arr_rows; i++) {
+
+        primary += arr[i][i];
+
+        secondary += arr[i][arr_columns - 1 - i];
     }
 
-    return sum;
+    return abs(primary - secondary);
 }
 
 int main()
 {
     FILE* fptr = fopen(getenv("OUTPUT_PATH"), "w");
 
-    int ar_count = parse_int(ltrim(rtrim(readline())));
+    int n = parse_int(ltrim(rtrim(readline())));
 
-    char** ar_temp = split_string(rtrim(readline()));
+    int** arr = malloc(n * sizeof(int*));
 
-    long* ar = malloc(ar_count * sizeof(long));
+    for (int i = 0; i < n; i++) {
 
-    for (int i = 0; i < ar_count; i++) {
-        long ar_item = parse_long(*(ar_temp + i));
+        *(arr + i) = malloc(n * sizeof(int));
 
-        *(ar + i) = ar_item;
+        char** arr_item_temp = split_string(rtrim(readline()));
+
+        for (int j = 0; j < n; j++) {
+
+            int arr_item = parse_int(*(arr_item_temp + j));
+
+            *(*(arr + i) + j) = arr_item;
+        }
     }
 
-    long result = aVeryBigSum(ar_count, ar);
+    int result = diagonalDifference(n, n, arr);
 
-    fprintf(fptr, "%ld\n", result);
+    fprintf(fptr, "%d\n", result);
 
     fclose(fptr);
 
@@ -67,7 +76,9 @@ char* readline() {
     char* data = malloc(alloc_length);
 
     while (true) {
+
         char* cursor = data + data_length;
+
         char* line = fgets(cursor, alloc_length - data_length, stdin);
 
         if (!line) {
@@ -76,8 +87,7 @@ char* readline() {
 
         data_length += strlen(cursor);
 
-        if (data_length < alloc_length - 1 ||
-            data[data_length - 1] == '\n') {
+        if (data_length < alloc_length - 1 || data[data_length - 1] == '\n') {
             break;
         }
 
@@ -92,6 +102,7 @@ char* readline() {
     }
 
     if (data[data_length - 1] == '\n') {
+
         data[data_length - 1] = '\0';
 
         data = realloc(data, data_length);
@@ -99,14 +110,14 @@ char* readline() {
         if (!data) {
             data = '\0';
         }
-    }
-    else {
+
+    } else {
+
         data = realloc(data, data_length + 1);
 
         if (!data) {
             data = '\0';
-        }
-        else {
+        } else {
             data[data_length] = '\0';
         }
     }
@@ -181,19 +192,6 @@ int parse_int(char* str) {
     char* endptr;
 
     int value = strtol(str, &endptr, 10);
-
-    if (endptr == str || *endptr != '\0') {
-        exit(EXIT_FAILURE);
-    }
-
-    return value;
-}
-
-long parse_long(char* str) {
-
-    char* endptr;
-
-    long value = strtol(str, &endptr, 10);
 
     if (endptr == str || *endptr != '\0') {
         exit(EXIT_FAILURE);
