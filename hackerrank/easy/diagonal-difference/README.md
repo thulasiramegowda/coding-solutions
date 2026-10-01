@@ -43,7 +43,7 @@ Each of the next $n$ lines describes a row, $arr[i]$, and consists of $n$ space-
 **Language:** C  
 **Runtime:** N/A  
 **Memory:** N/A  
-**Submitted:** 2026-10-01T07:17:34.835Z  
+**Submitted:** 2026-10-01T07:18:16.852Z  
 
 ```c
 #include <assert.h>
