@@ -17,55 +17,58 @@ char** split_string(char*);
 int parse_int(char*);
 
 /*
- * Complete the 'kangaroo' function below.
+ * Complete the 'getTotalX' function below.
  *
- * The function is expected to return a STRING.
+ * The function is expected to return an INTEGER.
  * The function accepts following parameters:
- *  1. INTEGER x1
- *  2. INTEGER v1
- *  3. INTEGER x2
- *  4. INTEGER v2
+ *  1. INTEGER_ARRAY a
+ *  2. INTEGER_ARRAY b
  */
 
-char* kangaroo(int x1, int v1, int x2, int v2) {
+int getTotalX(int a_count, int* a, int b_count, int* b) {
 
-    static char yes[] = "YES";
-    static char no[] = "NO";
-
-    /*
-     * After n jumps:
-     *
-     * Kangaroo 1 = x1 + n*v1
-     * Kangaroo 2 = x2 + n*v2
-     *
-     * They meet when:
-     *
-     * x1 + n*v1 = x2 + n*v2
-     *
-     * Therefore:
-     *
-     * n = (x2 - x1) / (v1 - v2)
-     *
-     * n must be a positive integer.
-     */
-
-    if (v1 == v2) {
-        return no;
-    }
-
-    int distance = x2 - x1;
-    int speedDifference = v1 - v2;
+    int count = 0;
 
     /*
-     * They must meet after a whole number of jumps.
+     * Check every possible number.
+     *
+     * The answer must:
+     * 1. Be divisible by every number in a.
+     * 2. Divide every number in b.
      */
-    if (distance % speedDifference == 0 &&
-        distance / speedDifference >= 0) {
 
-        return yes;
+    for (int x = 1; x <= 100; x++) {
+
+        bool valid = true;
+
+        // Check if x is a multiple of every element in a
+        for (int i = 0; i < a_count; i++) {
+
+            if (x % a[i] != 0) {
+                valid = false;
+                break;
+            }
+        }
+
+        if (!valid) {
+            continue;
+        }
+
+        // Check if x is a factor of every element in b
+        for (int i = 0; i < b_count; i++) {
+
+            if (b[i] % x != 0) {
+                valid = false;
+                break;
+            }
+        }
+
+        if (valid) {
+            count++;
+        }
     }
 
-    return no;
+    return count;
 }
 
 int main()
@@ -75,17 +78,40 @@ int main()
     char** first_multiple_input =
         split_string(rtrim(readline()));
 
-    int x1 = parse_int(*(first_multiple_input + 0));
+    int n = parse_int(*(first_multiple_input + 0));
 
-    int v1 = parse_int(*(first_multiple_input + 1));
+    int m = parse_int(*(first_multiple_input + 1));
 
-    int x2 = parse_int(*(first_multiple_input + 2));
+    char** arr_temp =
+        split_string(rtrim(readline()));
 
-    int v2 = parse_int(*(first_multiple_input + 3));
+    int* arr = malloc(n * sizeof(int));
 
-    char* result = kangaroo(x1, v1, x2, v2);
+    for (int i = 0; i < n; i++) {
 
-    fprintf(fptr, "%s\n", result);
+        int arr_item =
+            parse_int(*(arr_temp + i));
+
+        *(arr + i) = arr_item;
+    }
+
+    char** brr_temp =
+        split_string(rtrim(readline()));
+
+    int* brr = malloc(m * sizeof(int));
+
+    for (int i = 0; i < m; i++) {
+
+        int brr_item =
+            parse_int(*(brr_temp + i));
+
+        *(brr + i) = brr_item;
+    }
+
+    int total =
+        getTotalX(n, arr, m, brr);
+
+    fprintf(fptr, "%d\n", total);
 
     fclose(fptr);
 
