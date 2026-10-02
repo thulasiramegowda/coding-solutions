@@ -1,4 +1,4 @@
-# Mini-Max Sum
+# Birthday Cake Candles
 
 ![Difficulty](https://img.shields.io/badge/Difficulty-Medium-yellow)
 
@@ -40,7 +40,7 @@ The second line contains $n$ space-separated integers, where each integer $i$ de
 **Language:** C  
 **Runtime:** N/A  
 **Memory:** N/A  
-**Submitted:** 2026-10-02T16:28:15.427Z  
+**Submitted:** 2026-10-02T16:29:47.477Z  
 
 ```c
 #include <assert.h>
@@ -62,48 +62,55 @@ char** split_string(char*);
 int parse_int(char*);
 
 /*
- * Complete the 'miniMaxSum' function below.
+ * Complete the 'birthdayCakeCandles' function below.
  *
- * The function accepts INTEGER_ARRAY arr as parameter.
+ * The function is expected to return an INTEGER.
+ * The function accepts INTEGER_ARRAY candles as parameter.
  */
 
-void miniMaxSum(int arr_count, int* arr) {
+int birthdayCakeCandles(int candles_count, int* candles) {
 
-    long long sum = 0;
-    int min = arr[0];
-    int max = arr[0];
+    int max = candles[0];
+    int count = 0;
 
-    for (int i = 0; i < arr_count; i++) {
-        sum += arr[i];
-
-        if (arr[i] < min) {
-            min = arr[i];
-        }
-
-        if (arr[i] > max) {
-            max = arr[i];
+    // Find the tallest candle
+    for (int i = 0; i < candles_count; i++) {
+        if (candles[i] > max) {
+            max = candles[i];
         }
     }
 
-    long long minSum = sum - max;
-    long long maxSum = sum - min;
+    // Count how many candles have the maximum height
+    for (int i = 0; i < candles_count; i++) {
+        if (candles[i] == max) {
+            count++;
+        }
+    }
 
-    printf("%lld %lld\n", minSum, maxSum);
+    return count;
 }
 
 int main()
 {
-    char** arr_temp = split_string(rtrim(readline()));
+    FILE* fptr = fopen(getenv("OUTPUT_PATH"), "w");
 
-    int* arr = malloc(5 * sizeof(int));
+    int candles_count = parse_int(ltrim(rtrim(readline())));
 
-    for (int i = 0; i < 5; i++) {
-        int arr_item = parse_int(*(arr_temp + i));
+    char** candles_temp = split_string(rtrim(readline()));
 
-        *(arr + i) = arr_item;
+    int* candles = malloc(candles_count * sizeof(int));
+
+    for (int i = 0; i < candles_count; i++) {
+        int candles_item = parse_int(*(candles_temp + i));
+
+        *(candles + i) = candles_item;
     }
 
-    miniMaxSum(5, arr);
+    int result = birthdayCakeCandles(candles_count, candles);
+
+    fprintf(fptr, "%d\n", result);
+
+    fclose(fptr);
 
     return 0;
 }
