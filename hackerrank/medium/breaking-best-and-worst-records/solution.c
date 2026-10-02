@@ -17,101 +17,76 @@ char** split_string(char*);
 int parse_int(char*);
 
 /*
- * Complete the 'getTotalX' function below.
+ * Complete the 'breakingRecords' function below.
  *
- * The function is expected to return an INTEGER.
- * The function accepts following parameters:
- *  1. INTEGER_ARRAY a
- *  2. INTEGER_ARRAY b
+ * The function is expected to return an INTEGER_ARRAY.
+ * The function accepts INTEGER_ARRAY scores as parameter.
  */
 
-int getTotalX(int a_count, int* a, int b_count, int* b) {
+int* breakingRecords(int scores_count, int* scores, int* result_count) {
 
-    int count = 0;
+    int* result = malloc(2 * sizeof(int));
 
-    /*
-     * Check every possible number.
-     *
-     * The answer must:
-     * 1. Be divisible by every number in a.
-     * 2. Divide every number in b.
-     */
+    int max = scores[0];
+    int min = scores[0];
 
-    for (int x = 1; x <= 100; x++) {
+    int maxCount = 0;
+    int minCount = 0;
 
-        bool valid = true;
+    for (int i = 1; i < scores_count; i++) {
 
-        // Check if x is a multiple of every element in a
-        for (int i = 0; i < a_count; i++) {
-
-            if (x % a[i] != 0) {
-                valid = false;
-                break;
-            }
+        if (scores[i] > max) {
+            max = scores[i];
+            maxCount++;
         }
 
-        if (!valid) {
-            continue;
-        }
-
-        // Check if x is a factor of every element in b
-        for (int i = 0; i < b_count; i++) {
-
-            if (b[i] % x != 0) {
-                valid = false;
-                break;
-            }
-        }
-
-        if (valid) {
-            count++;
+        if (scores[i] < min) {
+            min = scores[i];
+            minCount++;
         }
     }
 
-    return count;
+    result[0] = maxCount;
+    result[1] = minCount;
+
+    *result_count = 2;
+
+    return result;
 }
 
 int main()
 {
     FILE* fptr = fopen(getenv("OUTPUT_PATH"), "w");
 
-    char** first_multiple_input =
-        split_string(rtrim(readline()));
+    int n = parse_int(ltrim(rtrim(readline())));
 
-    int n = parse_int(*(first_multiple_input + 0));
+    char** scores_temp = split_string(rtrim(readline()));
 
-    int m = parse_int(*(first_multiple_input + 1));
-
-    char** arr_temp =
-        split_string(rtrim(readline()));
-
-    int* arr = malloc(n * sizeof(int));
+    int* scores = malloc(n * sizeof(int));
 
     for (int i = 0; i < n; i++) {
 
-        int arr_item =
-            parse_int(*(arr_temp + i));
+        int scores_item =
+            parse_int(*(scores_temp + i));
 
-        *(arr + i) = arr_item;
+        *(scores + i) = scores_item;
     }
 
-    char** brr_temp =
-        split_string(rtrim(readline()));
+    int result_count;
 
-    int* brr = malloc(m * sizeof(int));
+    int* result =
+        breakingRecords(n, scores, &result_count);
 
-    for (int i = 0; i < m; i++) {
+    for (int i = 0; i < result_count; i++) {
 
-        int brr_item =
-            parse_int(*(brr_temp + i));
+        fprintf(fptr, "%d", *(result + i));
 
-        *(brr + i) = brr_item;
+        if (i != result_count - 1) {
+            fprintf(fptr, " ");
+        }
     }
 
-    int total =
-        getTotalX(n, arr, m, brr);
-
-    fprintf(fptr, "%d\n", total);
+    fprintf(fptr, "\n");
 
     fclose(fptr);
 
@@ -198,7 +173,6 @@ char* ltrim(char* str) {
 
     while (*str != '\0' &&
            isspace(*str)) {
-
         str++;
     }
 
@@ -220,7 +194,6 @@ char* rtrim(char* str) {
 
     while (end >= str &&
            isspace(*end)) {
-
         end--;
     }
 
@@ -267,7 +240,6 @@ int parse_int(char* str) {
 
     if (endptr == str ||
         *endptr != '\0') {
-
         exit(EXIT_FAILURE);
     }
 
