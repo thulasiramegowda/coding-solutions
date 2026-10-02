@@ -1,4 +1,4 @@
-# Breaking the Records
+# Subarray Division
 
 ![Difficulty](https://img.shields.io/badge/Difficulty-Medium-yellow)
 
@@ -56,7 +56,7 @@ The third line contains two space-separated integers, $d$ and $m$, Ron's birth d
 **Language:** C  
 **Runtime:** N/A  
 **Memory:** N/A  
-**Submitted:** 2026-10-02T16:44:32.015Z  
+**Submitted:** 2026-10-02T16:45:03.742Z  
 
 ```c
 #include <assert.h>
@@ -78,41 +78,36 @@ char** split_string(char*);
 int parse_int(char*);
 
 /*
- * Complete the 'breakingRecords' function below.
+ * Complete the 'birthday' function below.
  *
- * The function is expected to return an INTEGER_ARRAY.
- * The function accepts INTEGER_ARRAY scores as parameter.
+ * The function is expected to return an INTEGER.
+ * The function accepts following parameters:
+ *  1. INTEGER_ARRAY s
+ *  2. INTEGER d
+ *  3. INTEGER m
  */
 
-int* breakingRecords(int scores_count, int* scores, int* result_count) {
+int birthday(int s_count, int* s, int d, int m) {
 
-    int* result = malloc(2 * sizeof(int));
+    int count = 0;
 
-    int max = scores[0];
-    int min = scores[0];
+    /*
+     * Check every consecutive group of m squares.
+     */
+    for (int i = 0; i <= s_count - m; i++) {
 
-    int maxCount = 0;
-    int minCount = 0;
+        int sum = 0;
 
-    for (int i = 1; i < scores_count; i++) {
-
-        if (scores[i] > max) {
-            max = scores[i];
-            maxCount++;
+        for (int j = i; j < i + m; j++) {
+            sum += s[j];
         }
 
-        if (scores[i] < min) {
-            min = scores[i];
-            minCount++;
+        if (sum == d) {
+            count++;
         }
     }
 
-    result[0] = maxCount;
-    result[1] = minCount;
-
-    *result_count = 2;
-
-    return result;
+    return count;
 }
 
 int main()
@@ -121,33 +116,31 @@ int main()
 
     int n = parse_int(ltrim(rtrim(readline())));
 
-    char** scores_temp = split_string(rtrim(readline()));
+    char** s_temp = split_string(rtrim(readline()));
 
-    int* scores = malloc(n * sizeof(int));
+    int* s = malloc(n * sizeof(int));
 
     for (int i = 0; i < n; i++) {
 
-        int scores_item =
-            parse_int(*(scores_temp + i));
+        int s_item =
+            parse_int(*(s_temp + i));
 
-        *(scores + i) = scores_item;
+        *(s + i) = s_item;
     }
 
-    int result_count;
+    char** first_multiple_input =
+        split_string(rtrim(readline()));
 
-    int* result =
-        breakingRecords(n, scores, &result_count);
+    int d =
+        parse_int(*(first_multiple_input + 0));
 
-    for (int i = 0; i < result_count; i++) {
+    int m =
+        parse_int(*(first_multiple_input + 1));
 
-        fprintf(fptr, "%d", *(result + i));
+    int result =
+        birthday(n, s, d, m);
 
-        if (i != result_count - 1) {
-            fprintf(fptr, " ");
-        }
-    }
-
-    fprintf(fptr, "\n");
+    fprintf(fptr, "%d\n", result);
 
     fclose(fptr);
 
@@ -234,6 +227,7 @@ char* ltrim(char* str) {
 
     while (*str != '\0' &&
            isspace(*str)) {
+
         str++;
     }
 
@@ -255,6 +249,7 @@ char* rtrim(char* str) {
 
     while (end >= str &&
            isspace(*end)) {
+
         end--;
     }
 
@@ -301,6 +296,7 @@ int parse_int(char* str) {
 
     if (endptr == str ||
         *endptr != '\0') {
+
         exit(EXIT_FAILURE);
     }
 
