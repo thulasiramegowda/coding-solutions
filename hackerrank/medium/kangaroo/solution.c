@@ -17,114 +17,77 @@ char** split_string(char*);
 int parse_int(char*);
 
 /*
- * Complete the 'countApplesAndOranges' function below.
+ * Complete the 'kangaroo' function below.
  *
+ * The function is expected to return a STRING.
  * The function accepts following parameters:
- *  1. INTEGER s
- *  2. INTEGER t
- *  3. INTEGER a
- *  4. INTEGER b
- *  5. INTEGER_ARRAY apples
- *  6. INTEGER_ARRAY oranges
+ *  1. INTEGER x1
+ *  2. INTEGER v1
+ *  3. INTEGER x2
+ *  4. INTEGER v2
  */
 
-void countApplesAndOranges(
-    int s,
-    int t,
-    int a,
-    int b,
-    int apples_count,
-    int* apples,
-    int oranges_count,
-    int* oranges
-) {
+char* kangaroo(int x1, int v1, int x2, int v2) {
 
-    int apple_count = 0;
-    int orange_count = 0;
+    static char yes[] = "YES";
+    static char no[] = "NO";
 
-    // Check apples
-    for (int i = 0; i < apples_count; i++) {
+    /*
+     * After n jumps:
+     *
+     * Kangaroo 1 = x1 + n*v1
+     * Kangaroo 2 = x2 + n*v2
+     *
+     * They meet when:
+     *
+     * x1 + n*v1 = x2 + n*v2
+     *
+     * Therefore:
+     *
+     * n = (x2 - x1) / (v1 - v2)
+     *
+     * n must be a positive integer.
+     */
 
-        int position = a + apples[i];
-
-        if (position >= s && position <= t) {
-            apple_count++;
-        }
+    if (v1 == v2) {
+        return no;
     }
 
-    // Check oranges
-    for (int i = 0; i < oranges_count; i++) {
+    int distance = x2 - x1;
+    int speedDifference = v1 - v2;
 
-        int position = b + oranges[i];
+    /*
+     * They must meet after a whole number of jumps.
+     */
+    if (distance % speedDifference == 0 &&
+        distance / speedDifference >= 0) {
 
-        if (position >= s && position <= t) {
-            orange_count++;
-        }
+        return yes;
     }
 
-    printf("%d\n", apple_count);
-    printf("%d\n", orange_count);
+    return no;
 }
 
 int main()
 {
+    FILE* fptr = fopen(getenv("OUTPUT_PATH"), "w");
+
     char** first_multiple_input =
         split_string(rtrim(readline()));
 
-    int s = parse_int(*(first_multiple_input + 0));
+    int x1 = parse_int(*(first_multiple_input + 0));
 
-    int t = parse_int(*(first_multiple_input + 1));
+    int v1 = parse_int(*(first_multiple_input + 1));
 
-    char** second_multiple_input =
-        split_string(rtrim(readline()));
+    int x2 = parse_int(*(first_multiple_input + 2));
 
-    int a = parse_int(*(second_multiple_input + 0));
+    int v2 = parse_int(*(first_multiple_input + 3));
 
-    int b = parse_int(*(second_multiple_input + 1));
+    char* result = kangaroo(x1, v1, x2, v2);
 
-    char** third_multiple_input =
-        split_string(rtrim(readline()));
+    fprintf(fptr, "%s\n", result);
 
-    int m = parse_int(*(third_multiple_input + 0));
-
-    int n = parse_int(*(third_multiple_input + 1));
-
-    char** apples_temp =
-        split_string(rtrim(readline()));
-
-    int* apples = malloc(m * sizeof(int));
-
-    for (int i = 0; i < m; i++) {
-
-        int apples_item =
-            parse_int(*(apples_temp + i));
-
-        *(apples + i) = apples_item;
-    }
-
-    char** oranges_temp =
-        split_string(rtrim(readline()));
-
-    int* oranges = malloc(n * sizeof(int));
-
-    for (int i = 0; i < n; i++) {
-
-        int oranges_item =
-            parse_int(*(oranges_temp + i));
-
-        *(oranges + i) = oranges_item;
-    }
-
-    countApplesAndOranges(
-        s,
-        t,
-        a,
-        b,
-        m,
-        apples,
-        n,
-        oranges
-    );
+    fclose(fptr);
 
     return 0;
 }
