@@ -45,8 +45,8 @@ Output: [3,4,6,16,17]
 
 **Language:** C  
 **Runtime:** 0 ms (beats 100.00%)  
-**Memory:** 12.1 MB (beats 12.86%)  
-**Submitted:** 2026-09-27T17:38:41.673Z  
+**Memory:** 11.8 MB (beats 84.76%)  
+**Submitted:** 2026-10-04T05:09:42.654Z  
 
 ```c
 /**
@@ -54,12 +54,12 @@ Output: [3,4,6,16,17]
  */
 int* runningSum(int* nums, int numsSize, int* returnSize) {
     int* answer = malloc(numsSize * sizeof(int));
-    answer[0] = nums[0];
-      for(int i=1;i<numsSize;i++){
-       answer[i]=answer[i-1]+nums[i];
-        }
-     *returnSize = numsSize;
-     return answer;
+    for(int i=1;i<numsSize;i++){
+        answer[i]=nums[i]+nums[i-1];
+        nums[i]=answer[i];
+    }
+    *returnSize = numsSize;
+    return nums;
 }
 ```
 
