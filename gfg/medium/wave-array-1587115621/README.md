@@ -33,7 +33,7 @@ Output: [1]
 **Language:** c(gcc5.4)  
 **Runtime:** N/A  
 **Memory:** N/A  
-**Submitted:** 2026-10-07T13:34:36.872Z  
+**Submitted:** 2026-10-07T13:35:02.068Z  
 
 ```c(gcc5.4)
 void sortInWave(int *arr, int n) {
