@@ -8,6 +8,8 @@ Given an integer array `nums` and an integer `k`, return `true`  *if there are t
 
  
 
+Original
+C
  **Example 1:** 
 
 ```
@@ -43,19 +45,51 @@ Output: false
 ## Solution
 
 **Language:** C  
-**Runtime:** 0 ms  
-**Memory:** 8.6 MB  
-**Submitted:** 2026-09-30T10:43:38.366Z  
+**Runtime:** 33 ms (beats 72.12%)  
+**Memory:** 43.1 MB (beats 31.89%)  
+**Submitted:** 2026-11-18T14:21:43.187Z  
 
 ```c
 bool containsNearbyDuplicate(int* nums, int numsSize, int k) {
-    for(int i=0;i<numsSize;i++){
-        for(int j=i+1;j<numsSize;j++){
-            if(nums[i]==nums[j] && abs(i-j)<=k){
-                return true;
-            }
-        }
+    typedef struct {
+        int key;
+        int index;
+        int used;
+    } Entry;
+
+    if (k == 0 || numsSize < 2) {
+        return false;
     }
+
+    int size = 1;
+    while (size < numsSize * 2) {
+        size *= 2;
+    }
+
+    Entry* table = calloc(size, sizeof(Entry));
+
+    if (table == NULL) {
+        return false;
+    }
+
+    for (int i = 0; i < numsSize; i++) {
+        unsigned int h = ((unsigned int)nums[i] * 2654435761u) & (size - 1);
+
+        while (table[h].used && table[h].key != nums[i]) {
+            h = (h + 1) & (size - 1);
+        }
+
+        if (table[h].used && i - table[h].index <= k) {
+            free(table);
+            return true;
+        }
+
+        table[h].key = nums[i];
+        table[h].index = i;
+        table[h].used = 1;
+    }
+
+    free(table);
     return false;
 }
 ```
